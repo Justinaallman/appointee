@@ -1,0 +1,147 @@
+/* بکگراند تایل برای کل صفحه */
+body {
+  background-image: url('/images/backgroundblue.jpg');
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: top left;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* استایل باکس لاگین با اندازه نسبی و ریسپانسیو بهتر */
+.login-box {
+  max-width: 60%;      /* حداکثر عرض برای دسکتاپ */
+  max-height: 70%;     /* حداکثر ارتفاع */
+  min-width: 260px;      /* حداقل عرض */
+  min-height: 340px;     /* حداقل ارتفاع */
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  overflow: visible;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(214, 228, 233, 0.5);
+  display: flex; 
+  flex-direction: row;
+  margin: 10% auto;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.3s, height 0.3s;
+  
+}
+
+
+/* بخش عکس سمت چپ */
+.login-image-side {
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(214, 228, 233, 0.5);
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 10px 10px 10px 10px; /* لبه‌های گرد سمت چپ */ }
+
+/* فرم لاگین سمت راست */
+.login-form-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding-left : 2%;
+  padding-right: 2%;
+  min-width: 0;
+}
+
+/* گیف */
+.login-gif {
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0 auto;
+  filter: hue-rotate(180deg) saturate(3) brightness(1.2);
+  width: 80%;
+  max-width: 200px;
+  max-height: 180px;
+}
+
+/* login.css */
+.login-image-side img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  height: auto;
+  width: auto;
+}
+
+/* آواتار کاربری با سایه و انیمیشن پالس نرم و فید بهتر */
+.login-avatar {
+  display: block;
+  margin: 24px auto 16px auto;
+  width: 130px;
+  height: 130px;
+  border-radius: 100%;
+  object-fit: cover;
+  box-shadow: 0 0 16px 0 rgba(0, 157, 255, 0.25), 0 0 0 0 rgba(0,157,255,0.15);
+  animation: avatar-glow 2.2s infinite alternate;
+  transition: box-shadow 0.3s;
+}
+/* یک کانتینر مخصوص برای دکمه تاگل زبان */
+.lang-toggle-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: transparent;
+  pointer-events: auto;
+}
+.lang-toggle-btn {
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+/* انیمیشن پالس با فید نرم‌تر و لبه‌های محو */
+@keyframes avatar-glow {
+  0% {
+    box-shadow:
+      0 0 16px 0 rgba(209, 233, 248, 0.25),
+      0 0 0 0 rgba(0,157,255,0.15);
+  }
+  60% {
+    box-shadow:
+      0 0 24px 6px rgba(0, 157, 255, 0.30),
+      0 0 32px 12px rgba(0,157,255,0.10);
+  }
+  100% {
+    box-shadow:
+      0 0 32px 12px rgba(0, 157, 255, 0.18),
+      0 0 48px 24px rgba(0,157,255,0.08);
+  }
+}
+
+/* فاصله بین آیتم‌های فرم لاگین */
+.login-form-side > *:not(:last-child) {
+  margin-bottom: 14px;
+}
+
+/* ریسپانسیو برای موبایل */
+@media (max-width: 700px) {
+  .login-box {
+    flex-direction: column;
+    width: 96vw;
+    height: auto;
+    min-height: 340px;
+    max-width: 98vw;
+    margin: 4vh auto;
+  }
+  .login-image-side,
+  .login-form-side {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+  }
+}

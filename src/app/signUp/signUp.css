@@ -1,0 +1,183 @@
+/* صفحه ثبت‌نام اپوینتی */
+
+body {
+  background-image: url('/images/backgroundblue.jpg');
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: top left;
+  min-height: 100vh;
+  margin: 5rem;
+  padding: 0;
+}
+
+/* انیمیشن خوش‌آمدگویی */
+.welcome-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 220px;
+  width: 100vw;
+  height: 60vh;
+  position: relative;
+}
+.welcome-box {
+  background: rgba(255,255,255,0.93);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+  padding: 36px 48px;
+  min-width: 320px;
+  max-width: 420px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.welcome-text {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1976d2;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #1976d2;
+  animation: typing 1.2s steps(30, end), blink-caret 0.7s step-end infinite;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #1976d2; }
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ردیف کارت نقش و فرم */
+.role-form-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0; /* فاصله بین کارت‌ها در حالت اولیه صفر */
+  margin-top: 40px;
+  min-height: 260px;
+  transition: all 0.3s;
+}
+
+/* کارت نقش - حالت اولیه */
+.role-card {
+  background: #9bbada6e;
+  border-radius: 18px ;
+  box-shadow: 0 4px 16px rgba(25,118,210,0.08);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 
+    border 0.2s, box-shadow 0.2s, 
+    transform 0.2s, opacity 0.3s, 
+    width 0.4s cubic-bezier(.77,0,.18,1), 
+    margin 0.3s;
+  position: relative;
+  width: 40vw;         /* هر کارت نصف ۸۰٪ */
+  max-width: 380px;
+  min-width: 180px;
+  height: 80vh; /* ارتفاع کارت‌ها */
+  margin: .5rem;           /* فاصله بین کارت‌ها صفر */
+}
+
+/* وقتی نقش انتخاب شد */
+.role-form-row.role-selected .role-card {
+  width: 180px;
+  min-width: 140px;
+  max-width: 200px;
+  height: 55vh;
+  margin-left: 0;
+  margin-right: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  transform: scale(0.95);
+ padding-bottom: 1rem;
+ padding-top: 1rem;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* فقط کارت انتخاب‌شده فعال بماند */
+.role-form-row.role-selected .role-card.selected {
+  width: 300px;
+  min-width: 140px;
+  max-width: 200px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1.08) rotate(-2deg);
+  border: 2.5px solid #1976d2;
+  box-shadow: 0 8px 24px rgba(25,118,210,0.13);
+  z-index: 2;
+
+}
+
+/* عکس کارت */
+.role-img {
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  width: 90% !important;
+  height: 90% !important;
+  margin-bottom: 16px;
+  object-fit: contain;
+  display: block;
+}
+
+/* باکس فرم */
+.slide-box {
+  width: 350px;
+  min-width: 260px;
+  padding: 24px 18px;
+  border-radius: 18px;
+  background: rgba(161, 190, 219, 0.494);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  z-index: 3;
+  animation: slideInForm 0.5s;
+}
+@keyframes slideInForm {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* ریسپانسیو */
+@media (max-width: 700px) {
+  .role-form-row {
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+  .slide-box {
+    width: 95vw;
+    min-width: 0;
+  }
+}
+.lang-toggle-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: transparent;
+  pointer-events: auto;
+}
+.lang-toggle-btn {
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}

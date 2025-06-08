@@ -1,0 +1,12 @@
+.card {
+    padding: 2rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    text-align: center;
+    width: 150px;
+  }
+  
+  .card:hover {
+    transform: scale(1.1);
+  }
+  
