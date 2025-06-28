@@ -53,7 +53,6 @@ const FlagSwitch = styled(Switch)(({ language }) => ({
 export default function LanguageToggle({ value, onChange }) {
   const [language, setLanguage] = useState(value || 'fa');
 
-  // این خط باعث می‌شود با تغییر زبان، فونت و دایرکشن هم عوض شود
   useFontDirection(language);
 
   const handleChange = (event) => {
@@ -61,6 +60,10 @@ export default function LanguageToggle({ value, onChange }) {
     setLanguage(newLang);
     if (onChange) onChange(newLang);
   };
+
+  useEffect(() => {
+    setLanguage(value);
+  }, [value]);
 
   return (
     <FlagSwitch

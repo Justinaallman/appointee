@@ -13,7 +13,6 @@ export default function useFontDirection(lang, selector = "body") {
       el.style.textAlign = "left";
       el.style.direction = "ltr";
     }
-    // پاکسازی (اختیاری)
     return () => {
       el.style.fontFamily = "";
       el.style.direction = "";

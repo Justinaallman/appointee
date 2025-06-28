@@ -1,4 +1,3 @@
-/* بکگراند تایل برای کل صفحه */
 body {
   background-image: url('/images/backgroundblue.jpg');
   background-repeat: repeat;
@@ -9,29 +8,25 @@ body {
   padding: 0;
 }
 
-/* استایل باکس لاگین با اندازه نسبی و ریسپانسیو بهتر */
 .login-box {
-  max-width: 60%;      /* حداکثر عرض برای دسکتاپ */
-  max-height: 70%;     /* حداکثر ارتفاع */
-  min-width: 260px;      /* حداقل عرض */
-  min-height: 340px;     /* حداقل ارتفاع */
+  max-width: 60%;
+  max-height: 70%;
+  min-width: 260px;
+  min-height: 340px;
   background-color: rgba(255, 255, 255, 0.25);
   border-radius: 10px;
   backdrop-filter: blur(10px);
   overflow: visible;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(214, 228, 233, 0.5);
-  display: flex; 
+  display: flex;
   flex-direction: row;
   margin: 10% auto;
   align-items: center;
   justify-content: center;
   transition: width 0.3s, height 0.3s;
-  
 }
 
-
-/* بخش عکس سمت چپ */
 .login-image-side {
   flex: 1.5;
   display: flex;
@@ -41,9 +36,9 @@ body {
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
-  border-radius: 10px 10px 10px 10px; /* لبه‌های گرد سمت چپ */ }
+  border-radius: 10px 10px 10px 10px;
+}
 
-/* فرم لاگین سمت راست */
 .login-form-side {
   flex: 1;
   display: flex;
@@ -55,7 +50,6 @@ body {
   min-width: 0;
 }
 
-/* گیف */
 .login-gif {
   border-radius: 10px;
   padding: 10px;
@@ -66,7 +60,6 @@ body {
   max-height: 180px;
 }
 
-/* login.css */
 .login-image-side img {
   max-width: 100%;
   max-height: 100%;
@@ -76,7 +69,6 @@ body {
   width: auto;
 }
 
-/* آواتار کاربری با سایه و انیمیشن پالس نرم و فید بهتر */
 .login-avatar {
   display: block;
   margin: 24px auto 16px auto;
@@ -88,7 +80,6 @@ body {
   animation: avatar-glow 2.2s infinite alternate;
   transition: box-shadow 0.3s;
 }
-/* یک کانتینر مخصوص برای دکمه تاگل زبان */
 .lang-toggle-container {
   position: fixed;
   top: 24px;
@@ -104,7 +95,6 @@ body {
   border-radius: 4px !important;
   overflow: hidden !important;
 }
-/* انیمیشن پالس با فید نرم‌تر و لبه‌های محو */
 @keyframes avatar-glow {
   0% {
     box-shadow:
@@ -123,25 +113,6 @@ body {
   }
 }
 
-/* فاصله بین آیتم‌های فرم لاگین */
 .login-form-side > *:not(:last-child) {
   margin-bottom: 14px;
-}
-
-/* ریسپانسیو برای موبایل */
-@media (max-width: 700px) {
-  .login-box {
-    flex-direction: column;
-    width: 96vw;
-    height: auto;
-    min-height: 340px;
-    max-width: 98vw;
-    margin: 4vh auto;
-  }
-  .login-image-side,
-  .login-form-side {
-    width: 100%;
-    min-width: 0;
-    padding: 10px 0;
-  }
 }

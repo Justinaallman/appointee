@@ -12,7 +12,6 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.1.0",
-    "@prisma/client": "^6.9.0",
     "firebase": "^11.8.1",
     "i18next": "^25.2.0",
     "i18next-browser-languagedetector": "^8.1.0",
@@ -22,8 +21,5 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.5.1"
-  },
-  "devDependencies": {
-    "prisma": "^6.9.0"
   }
 }

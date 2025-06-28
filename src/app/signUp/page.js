@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Box, Button, TextField, Typography, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem, Alert } from "@mui/material";
 import LanguageToggle from "../../components/LanguageToggle";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,7 @@ import "../i18n";
 
 
 export default function SignUp() {
+  const [isClient, setIsClient] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [role, setRole] = useState(null); // مقدار اولیه null
   const [step, setStep] = useState(1);
@@ -26,12 +27,13 @@ export default function SignUp() {
     gender: "",
     medicalid: "",
     specialty: "",
-    email: "",
+    username: "", 
     password: "",
   });
   const [acceptRules, setAcceptRules] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
 
   useFontDirection(lang);
 
@@ -41,9 +43,15 @@ export default function SignUp() {
   };
 
   useEffect(() => {
+    setIsClient(true);
     const timer = setTimeout(() => setShowWelcome(false), 2200);
     return () => clearTimeout(timer);
   }, []);
+
+  // اگر هنوز در سمت سرور هستیم یا کلاینت آماده نیست، چیزی رندر نکن
+  if (!isClient) {
+    return null;
+  }
 
   const roles = [
     {
@@ -62,7 +70,16 @@ export default function SignUp() {
     setForm({ ...form, [field]: e.target.value });
   };
 
-  // فرم
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      if (step < stepsArr.length) {
+        setStep(step + 1);
+      } else {
+        handleSignUp();
+      }
+    }
+  };
+
   const doctorSteps = [
     [
       <TextField key="name" label={t("Name")} fullWidth margin="normal" value={form.name} onChange={handleChange("name")} error={!!errors.name} helperText={errors.name ? t("FillThisField") : ""} />,
@@ -87,7 +104,7 @@ export default function SignUp() {
     ],
     [
       <TextField key="specialty" label={t("Specialty")} fullWidth margin="normal" value={form.specialty} onChange={handleChange("specialty")} />,
-      <TextField key="username" label={t("Username")} fullWidth margin="normal" value={form.username} onChange={handleChange("username")} />,
+      <TextField key="username" label={t("Username")} fullWidth margin="normal" value={form.username} onChange={handleChange("username")} error={!!errors.username} helperText={errors.username ? t("FillThisField") : ""} />,
       <TextField key="password" label={t("Password")} type="password" fullWidth margin="normal" value={form.password} onChange={handleChange("password")} />,
     ],
   ];
@@ -114,7 +131,7 @@ export default function SignUp() {
       </FormControl>,
     ],
     [
-      <TextField key="email" label={t("Email")} fullWidth margin="normal" value={form.email} onChange={handleChange("email")} />,
+      <TextField key="username" label={t("Username")} fullWidth margin="normal" value={form.username} onChange={handleChange("username")} error={!!errors.username} helperText={errors.username ? t("FillThisField") : ""} />,
       <TextField key="password" label={t("Password")} type="password" fullWidth margin="normal" value={form.password} onChange={handleChange("password")} />,
     ],
   ];
@@ -124,46 +141,72 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     const requiredFields = role === "doctor"
-      ? ["name", "family", "gender", "medicalid", "specialty", "email", "password"]
-      : ["name", "family", "gender", "email", "password"];
+        ? ["name", "family", "gender", "medicalid", "specialty", "username", "password"]
+        : ["name", "family", "gender", "username", "password"];
+    
     let newErrors = {};
     requiredFields.forEach((f) => {
-      if (!form[f]) newErrors[f] = true;
+        if (!form[f]) newErrors[f] = true;
     });
-    if (!acceptRules) newErrors.acceptRules = true;
-    setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0 || !acceptRules) {
+        setErrors(newErrors);
+        if (!acceptRules) setErrors(prev => ({ ...prev, acceptRules: true }));
+        return;
+    }
 
     setLoading(true);
+    setServerError('');
+
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, role }),
-      });
-      const data = await res.json();
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        router.push("/profile");
-      } else {
-        console.error("Sign up failed:", data.message);
-        // نمایش خطا به کاربر
-      }
-    } catch (e) { 
-      console.error("Sign up error:", e);
-      // نمایش خطا به کاربر
+        const capitalizedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+        // تبدیل جنسیت به فرمت مناسب برای enum
+        const capitalizedGender = form.gender.charAt(0).toUpperCase() + form.gender.slice(1).toLowerCase();
+        
+        const response = await fetch("http://localhost:5000/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                Name: form.name,
+                LastName: form.family,
+                Role: capitalizedRole,
+                Gender: capitalizedGender,  
+                Username: form.username,
+                Password: form.password,
+                Medical_ID: role === "doctor" ? form.medicalid : null,
+                specialty: role === "doctor" ? form.specialty : null
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'خطا در ثبت‌نام');
+        }
+
+        const data = await response.json();
+        
+        if (data.success) {
+            router.push("/login");
+        } else {
+            setServerError(data.error || t('SignUpFailed'));
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        setServerError(error.message || t('NetworkError'));
+    } finally {
+        setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <>
       <title>{t("SignUp")}</title>
-      
-        <div className="lang-toggle-container">
-          <LanguageToggle value={lang} onChange={handleLanguageChange} />
-        </div>
+      <div className="lang-toggle-container">
+        <LanguageToggle value={lang} onChange={handleLanguageChange} />
+      </div>
       <Box className="signup-root">
         {showWelcome ? (
           <div className="welcome-animation">
@@ -192,12 +235,12 @@ export default function SignUp() {
                 </div>
               )
             ))}
-            {/* فرم فقط بعد انتخاب نقش */}
             {role && (
-              <Box
-                className="slide-box"
+              <Box 
+                className="slide-box" 
+                onKeyPress={handleKeyPress}
                 style={{
-                  Height: role === "doctor" ? "70vh" : "50vh"
+                  height: role === "doctor" ? "70vh" : "50vh"
                 }}
               >
                 <Button
@@ -212,7 +255,12 @@ export default function SignUp() {
                   {step === 1 ? t("Back") : t("Previous")}
                 </Button>
                 <Box className="step-fields-box">
-                  {stepsArr[step - 1]}
+                  {stepsArr[step - 1].map((field, index) => 
+                    React.cloneElement(field, {
+                      key: index,
+                      onKeyPress: handleKeyPress
+                    })
+                  )}
                 </Box>
                 {step < stepsArr.length ? (
                   <Button
@@ -240,16 +288,15 @@ export default function SignUp() {
                     {errors.acceptRules && (
                       <Typography color="error" variant="caption">{t("AcceptRulesAlert")}</Typography>
                     )}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      sx={{ mt: 2 }}
-                      onClick={handleSignUp}
-                      disabled={loading}
-                    >
-                      {loading ? t("Loading") : t("SignUp")}
-                    </Button>
+                    <Button 
+    variant="contained" 
+    color="primary"
+    fullWidth
+    disabled={loading || !acceptRules}
+    onClick={handleSignUp}
+>
+    {loading ? t("Loading") : t("SignUp")}
+</Button>
                     <Button
                       variant="text"
                       color="secondary"
@@ -260,6 +307,11 @@ export default function SignUp() {
                       {t("AlreadyHaveAccount")}
                     </Button>
                   </>
+                )}
+                {serverError && (
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                        {serverError}
+                    </Alert>
                 )}
               </Box>
             )}
