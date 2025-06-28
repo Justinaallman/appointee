@@ -123,7 +123,6 @@ export default function SignUp() {
   const stepsArr = role === "doctor" ? doctorSteps : patientSteps;
 
   const handleSignUp = async () => {
-    // بررسی پر بودن فیلدها
     const requiredFields = role === "doctor"
       ? ["name", "family", "gender", "medicalid", "specialty", "email", "password"]
       : ["name", "family", "gender", "email", "password"];

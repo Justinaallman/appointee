@@ -9,7 +9,6 @@ import useFontDirection from "../../hooks/useFontDirection";
 import LanguageToggle from "../../components/LanguageToggle";
 import { useRouter } from "next/navigation"; 
 
-
 export default function Login() {
   const { t, i18n } = useTranslation();
   const [lang, setLang] = React.useState(i18n.language || "en");
